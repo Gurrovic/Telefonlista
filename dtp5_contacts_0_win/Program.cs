@@ -20,6 +20,12 @@ namespace dtp5_contacts_0
                 this.city = city;
                 this.birthdate = birthdate;
             }
+
+            //GETTERS AND SETTERS
+
+            public string addPhone { get { return phone; } set { phone = $"{phone};{value}"; } }
+                
+            public string addAddress { get { return address; } set { address = value; } }
         }
         
         //Added helpText method for printing help commands
@@ -38,6 +44,8 @@ namespace dtp5_contacts_0
             Console.WriteLine();
         }
 
+
+
         //Added loadFile static method for loading data from file
 
         private static void loadFile(string lastFileName)
@@ -49,15 +57,33 @@ namespace dtp5_contacts_0
                 {
                     Console.WriteLine(line);
                     string[] attrs = line.Split('|');
-                    Person p = new Person(attrs[0], attrs[1], attrs[2], attrs[3], attrs[4], attrs[5]);
-                    for (int ix = 0; ix < contactList.Length; ix++)
+                    string[] phones = attrs[2].Split(';');
+                    string[] addresses = attrs[3].Split(';');
+                    Person p = new Person(attrs[0], attrs[1], phones[0], addresses[0], attrs[4], attrs[5]);
+                    for (int i = 1; i < phones.Length; i++)
                     {
-                        if (contactList[ix] == null)
-                        {
-                            contactList[ix] = p;
-                            break;
-                        }
+                        p.addPhone = phones[i];
+                        Console.WriteLine(p.phone);
                     }
+                    for (int i = 1; i < addresses.Length; i++)
+                    {
+                        p.addAddress = addresses[i];
+                    }
+                    loadList(p);
+                }
+            }
+        }
+
+        //loadList command to shorten the code
+
+        private static void loadList(Person p)
+        {
+            for (int ix = 0; ix < contactList.Length; ix++)
+            {
+                if (contactList[ix] == null)
+                {
+                    contactList[ix] = p;
+                    break;
                 }
             }
         }
@@ -80,8 +106,6 @@ namespace dtp5_contacts_0
                     outfile.WriteLine($"{p.persname}|{p.surname}|{p.phone}|{p.address}|{p.city}|{p.birthdate}");
             }
         }
-
-
         public static void Main(string[] args)
         {
             string lastFileName = "address.lis";
@@ -140,14 +164,7 @@ namespace dtp5_contacts_0
 
                         Person p = new Person(persname, surname, phone, adress, city, birthdate);
 
-                        for (int ix = 0; ix < contactList.Length; ix++)
-                        {
-                            if (contactList[ix] == null)
-                            {
-                                contactList[ix] = p;
-                                break;
-                            }
-                        }
+                        loadList(p);
                     }
                     else
                     {
