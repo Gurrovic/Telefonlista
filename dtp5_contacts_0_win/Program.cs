@@ -48,7 +48,7 @@ namespace dtp5_contacts_0
                 while ((line = infile.ReadLine()) != null)
                 {
                     Console.WriteLine(line);
-                    string[] attrs = line.Split(';');
+                    string[] attrs = line.Split('|');
                     Person p = new Person(attrs[0], attrs[1], attrs[2], attrs[3], attrs[4], attrs[5]);
                     for (int ix = 0; ix < contactList.Length; ix++)
                     {
@@ -60,6 +60,14 @@ namespace dtp5_contacts_0
                     }
                 }
             }
+        }
+
+        //Added input method for shortening the code
+
+        private static string input(string input)
+        {
+            Console.WriteLine(input);
+            return Console.ReadLine();
         }
 
 
@@ -100,7 +108,7 @@ namespace dtp5_contacts_0
                             foreach (Person p in contactList)
                             {
                                 if (p != null)
-                                    outfile.WriteLine($"{p.persname};{p.surname};{p.phone};{p.address};{p.city};{p.birthdate}");
+                                    outfile.WriteLine($"{p.persname}|{p.surname}|{p.phone}|{p.address}|{p.city}|{p.birthdate}");
                             }
                         }
                     }
@@ -114,20 +122,23 @@ namespace dtp5_contacts_0
                 {
                     if (commandLine.Length < 2)
                     {
-                        Console.Write("personal name: ");
-                        string persname = Console.ReadLine();
-                        Console.Write("surname: ");
-                        string surname = Console.ReadLine();
-                        Console.Write("phone: ");
-                        string phone = Console.ReadLine();
-                        Console.Write("phone: ");
-                        string adress = Console.ReadLine();
-                        Console.Write("phone: ");
-                        string birthdate = Console.ReadLine();
+                        string persname = input("Enter personal name: ");
+                        string surname = input("Enter surname: ");
+                        string phone = input("Enter phone number: ");
+                        string adress = input("Enter adress: ");
+                        string city = input("Enter city: ");
+                        string birthdate = input("Enter birthdate: ");
 
-                        //Person[] contactList = new Person[5];
+                        Person p = new Person(persname, surname, phone, adress, city, birthdate);
 
-
+                        for (int ix = 0; ix < contactList.Length; ix++)
+                        {
+                            if (contactList[ix] == null)
+                            {
+                                contactList[ix] = p;
+                                break;
+                            }
+                        }
                     }
                     else
                     {
