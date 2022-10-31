@@ -8,14 +8,24 @@ namespace dtp5_contacts_0
         static Person[] contactList = new Person[100];
         class Person
         {
-            public string persname, surname, phone, address, birthdate;
+            public string persname, surname, phone, address, city, birthdate;
+
+            //Constructor
+            public Person(string persname, string surname, string phone, string address, string city, string birthdate)
+            {
+                this.persname = persname;
+                this.surname = surname;
+                this.phone = phone;
+                this.address = address;
+                this.city = city;
+                this.birthdate = birthdate;
+            }
         }
-        public static void Main(string[] args)
+
+        private static void helpText()
         {
-            string lastFileName = "address.lis";
-            string[] commandLine;
-            Console.WriteLine("Hello and welcome to the contact list");
-            Console.WriteLine("Avaliable commands: ");
+            Console.WriteLine("\n  delete       - emtpy the contact list!");
+            Console.WriteLine("  delete /persname/ /surname/ - delete a person");
             Console.WriteLine("  load        - load contact list data from the file address.lis");
             Console.WriteLine("  load /file/ - load contact list data from the file");
             Console.WriteLine("  new        - create new person");
@@ -24,6 +34,15 @@ namespace dtp5_contacts_0
             Console.WriteLine("  save         - save contact list data to the file previously loaded");
             Console.WriteLine("  save /file/ - save contact list data to the file");
             Console.WriteLine();
+        }
+
+
+        public static void Main(string[] args)
+        {
+            string lastFileName = "address.lis";
+            string[] commandLine;
+            Console.WriteLine("Hello and welcome to the contact list");
+            helpText();
             do
             {
                 Console.Write($"> ");
@@ -45,13 +64,7 @@ namespace dtp5_contacts_0
                             {
                                 Console.WriteLine(line);
                                 string[] attrs = line.Split('|');
-                                Person p = new Person();
-                                p.persname = attrs[0];
-                                p.surname = attrs[1];
-                                string[] phones = attrs[2].Split(';');
-                                p.phone = phones[0];
-                                string[] addresses = attrs[3].Split(';');
-                                p.address = addresses[0];
+                                Person p = new Person(attrs[0], attrs[1], attrs[2], attrs[3], attrs[4], attrs[5]);                                
                                 for (int ix = 0; ix < contactList.Length; ix++)
                                 {
                                     if (contactList[ix] == null)
@@ -73,13 +86,7 @@ namespace dtp5_contacts_0
                             {
                                 Console.WriteLine(line);
                                 string[] attrs = line.Split('|');
-                                Person p = new Person();
-                                p.persname = attrs[0];
-                                p.surname = attrs[1];
-                                string[] phones = attrs[2].Split(';');
-                                p.phone = phones[0];
-                                string[] addresses = attrs[3].Split(';');
-                                p.address = addresses[0];
+                                Person p = new Person(attrs[0], attrs[1], attrs[2], attrs[3], attrs[4], attrs[5]);                                
                                 for (int ix = 0; ix < contactList.Length; ix++)
                                 {
                                     if (contactList[ix] == null)
@@ -121,6 +128,14 @@ namespace dtp5_contacts_0
                         string surname = Console.ReadLine();
                         Console.Write("phone: ");
                         string phone = Console.ReadLine();
+                        Console.Write("phone: ");
+                        string adress = Console.ReadLine();
+                        Console.Write("phone: ");
+                        string birthdate = Console.ReadLine();
+
+                        //Person[] contactList = new Person[5];
+
+
                     }
                     else
                     {
@@ -130,23 +145,13 @@ namespace dtp5_contacts_0
                 }
                 else if (commandLine[0] == "help")
                 {
-                    Console.WriteLine("Avaliable commands: ");
-                    Console.WriteLine("  delete       - emtpy the contact list");
-                    Console.WriteLine("  delete /persname/ /surname/ - delete a person");
-                    Console.WriteLine("  load        - load contact list data from the file address.lis");
-                    Console.WriteLine("  load /file/ - load contact list data from the file");
-                    Console.WriteLine("  new        - create new person");
-                    Console.WriteLine("  new /persname/ /surname/ - create new person with personal name and surname");
-                    Console.WriteLine("  quit        - quit the program");
-                    Console.WriteLine("  save         - save contact list data to the file previously loaded");
-                    Console.WriteLine("  save /file/ - save contact list data to the file");
-                    Console.WriteLine();
+                    helpText();
                 }
                 else
                 {
                     Console.WriteLine($"Unknown command: '{commandLine[0]}'");
                 }
             } while (commandLine[0] != "quit");
-        }
+        }        
     }
 }
