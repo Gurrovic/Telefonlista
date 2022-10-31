@@ -26,7 +26,7 @@ namespace dtp5_contacts_0
 
         private static void helpText()
         {
-            Console.WriteLine("\n  delete       - emtpy the contact list!");
+            Console.WriteLine("\n  delete       - empty the contact list!");
             Console.WriteLine("  delete /persname/ /surname/ - delete a person");
             Console.WriteLine("  load        - load contact list data from the file address.lis");
             Console.WriteLine("  load /file/ - load contact list data from the file");
@@ -70,6 +70,17 @@ namespace dtp5_contacts_0
             return Console.ReadLine();
         }
 
+        //Added savePrint to print the contact list to the file
+
+        private static void savePrint(StreamWriter outfile)
+        {
+            foreach (Person p in contactList)
+            {
+                if (p != null)
+                    outfile.WriteLine($"{p.persname}|{p.surname}|{p.phone}|{p.address}|{p.city}|{p.birthdate}");
+            }
+        }
+
 
         public static void Main(string[] args)
         {
@@ -82,8 +93,7 @@ namespace dtp5_contacts_0
                 Console.Write($"> ");
                 commandLine = Console.ReadLine().Split(' ');
                 if (commandLine[0] == "quit")
-                {
-                    // NYI!
+                {                    
                     Console.WriteLine("Not yet implemented: safe quit");
                 }
                 else if (commandLine[0] == "load")
@@ -102,20 +112,19 @@ namespace dtp5_contacts_0
                 else if (commandLine[0] == "save")
                 {
                     if (commandLine.Length < 2)
-                    {
+                    {                       
                         using (StreamWriter outfile = new StreamWriter(lastFileName))
                         {
-                            foreach (Person p in contactList)
-                            {
-                                if (p != null)
-                                    outfile.WriteLine($"{p.persname}|{p.surname}|{p.phone}|{p.address}|{p.city}|{p.birthdate}");
-                            }
+                            savePrint(outfile);
                         }
                     }
                     else
                     {
-                        // NYI!
-                        Console.WriteLine("Not yet implemented: save /file/");
+                        string fileName = @"C:\Users\Gusta\source\repos\Telefonlista\dtp5_contacts_0_win\bin\Debug\" + lastFileName;
+                        using (StreamWriter outfile = new StreamWriter(fileName))
+                        {
+                            savePrint(outfile);
+                        }
                     }
                 }
                 else if (commandLine[0] == "new")
@@ -155,6 +164,6 @@ namespace dtp5_contacts_0
                     Console.WriteLine($"Unknown command: '{commandLine[0]}'");
                 }
             } while (commandLine[0] != "quit");
-        }               
+        }       
     }
 }
